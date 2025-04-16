@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Labour Force Participation Predictor</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #e0eafc, #cfdef3);
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #007bff;
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+      font-size: 1.8rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: calc(100vh - 100px);
+      padding: 20px;
+    }
+
+    form {
+      background-color: #ffffff;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+      max-width: 450px;
+      width: 100%;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      background: #f9f9f9;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px;
+      width: 100%;
+      background-color: #007bff;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    footer {
+      text-align: center;
+      padding: 10px;
+      font-size: 0.9rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    Labour Force Participation Predictor
+  </header>
+
+  <main>
+    <form id="predictForm">
+      <label for="education">Educational Level</label>
+      <select name="education" required>
+        <option value="">Select</option>
+        <option value="Upper Secondary">None</option>
+        <option value="Tertiary">Primary</option>
+        <option value="Less than Primary">Lower secondary</option>
+        <option value="Less than Primary">Upper secondary</option>
+        <option value="Less than Primary">University</option>
+      </select>
+
+      <label for="field">Field of Education</label>
+      <select name="field" required>
+        <option value="">Select</option>
+        <option value="Education">General education</option>
+        <option value="Engineering">Engineering</option>
+        <option value="Science">engineering, manufacturing and construction</option>
+        <option value="Science">Social Science business and art</option>
+        <option value="Science">Services</option>
+        <!-- Add more fields as needed -->
+      </select>
+
+      <label for="tvt">TVET Graduate?</label>
+      <select name="tvt" required>
+        <option value="">Select</option>
+        <option value="Completed">Completed TVET</option>
+        <option value="Completed general">Completed general </option>
+        <option value="No level completed">No level completed</option>
+      </select>
+
+      <label for="sex">Sex</label>
+      <select name="sex" required>
+        <option value="">Select</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+
+      <label for="age_group">Age Group</label>
+      <select name="age_group" required>
+        <option value="">Select</option>
+        <option value="15-25">15–25</option>
+        <option value="26-35">26–35</option>
+        <option value="36-50">36–50</option>
+        <option value="51-65">51–65</option>
+        <option value="65+">65+</option>
+      </select>
+      <label for="Martial status">Martial status</label>
+      <select name="Status" required>
+        <option value="">Select</option>
+        <option value="Single">Single</option>
+        <option value="Widow/Widower">Widow/Widower</option>
+        <option value="Separated">Separated</option>
+        <option value="Married monogamously">Married monogamously</option>
+      </select>
+
+      <button type="submit">Predict</button>
+      <div id="result"></div>
+    </form>
+  </main>
+
+  <footer>
+    &copy; 2025 Labour Market AI Predictor
+
+  <script>
+    document.getElementById('predictForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const formObj = {};
+      formData.forEach((value, key) => formObj[key] = value);
+
+      const response = await fetch('/predict', {
+        method: 'POST',
+        body: new URLSearchParams(formObj)
+      });
+
+      const result = await response.json();
+      document.getElementById('result').innerText = result.prediction
+        ? `Prediction: ${result.prediction}`
+        : `Error: ${result.error}`;
+    });
+  </script>
+
+</body>
+</html>
